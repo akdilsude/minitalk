@@ -28,17 +28,17 @@ static int	ft_atoi(const char *str)
 void send_bits(int pid, char *str)
 {
 	int		i;
-	int		j;
+	int		count;
 	char	c;
 
 	i = 0;
 	while(str[i] != '\0')
 	{
-		j = 7;
+		count = 7;
 		c = str[i];
-		while(j--)
+		while(count--)
 		{
-			if (c >> j & 1)
+			if (c >> count & 1)
 				kill(pid, SIGUSR1);
 			else
 				kill(pid, SIGUSR2);
@@ -46,8 +46,8 @@ void send_bits(int pid, char *str)
 		}
 		i++;
 	}
-	j = 7;
-	while(j--)
+	count = 7;
+	while(count--)
 	{
 		kill(pid, SIGUSR2);
 		usleep(111);
