@@ -29,9 +29,6 @@ void	handle_signal(int signal_type)
 {
 	static char	str;
 	static int	count;
-	
-	str = 0;
-	count = 0;
 
 	str = str << 1;
 	if (signal_type == SIGUSR1)
@@ -54,7 +51,5 @@ int	main(void)
 	signal(SIGUSR1, handle_signal);
 	signal(SIGUSR2, handle_signal);
 	while (1)
-	{
 		pause();
-	}
 }
