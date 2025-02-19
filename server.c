@@ -29,19 +29,23 @@ void	handle_signal(int signal_type)
 {
 	static char	str;
 	static int	count;
+	
+	str = 0;
+	count = 0;
 
+	str = str << 1;
 	if (signal_type == SIGUSR1)
 		str = str | 1;
-	if (++count == 8)
+	count++;
+	if (count == 8)
 	{
-		count = 0;
 		if (!str)
 			write(1, "\n", 1);
-		write(1, &str, 1);
+		else
+			write(1, &str, 1);
+		count = 0;
 		str = 0;
 	}
-	else
-		str = str << 1;
 }
 int	main(void)
 {
