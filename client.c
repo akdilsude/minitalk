@@ -34,7 +34,7 @@ void send_bits(int pid, char *str)
 	i = 0;
 	while(str[i] != '\0')
 	{
-		count = 7;
+		count = 8;
 		c = str[i];
 		while(count--)
 		{
@@ -46,7 +46,7 @@ void send_bits(int pid, char *str)
 		}
 		i++;
 	}
-	count = 7;
+	count = 8;
 	while(count--)
 	{
 		kill(pid, SIGUSR2);
