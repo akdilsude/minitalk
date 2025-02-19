@@ -61,4 +61,5 @@ int main(int count, char **str)
     	return (1);
 	}
 	send_bits(ft_atoi(str[1]), str[2]);
+	return (0);
 }
