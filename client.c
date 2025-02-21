@@ -46,12 +46,6 @@ void send_bits(int pid, char *str)
 		}
 		i++;
 	}
-	count = 7;
-	while(count--)
-	{
-		kill(pid, SIGUSR2);
-		usleep(111);
-	}
 }
 int main(int count, char **str)
 {
