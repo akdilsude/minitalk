@@ -34,7 +34,7 @@ void send_bits(int pid, char *str)
 	i = 0;
 	while(str[i] != '\0')
 	{
-		count = 8;
+		count = 7;
 		c = str[i];
 		while(count--)
 		{
@@ -46,7 +46,7 @@ void send_bits(int pid, char *str)
 		}
 		i++;
 	}
-	count = 8;
+	count = 7;
 	while(count--)
 	{
 		kill(pid, SIGUSR2);
@@ -61,5 +61,4 @@ int main(int count, char **str)
     	return (1);
 	}
 	send_bits(ft_atoi(str[1]), str[2]);
-	return (0);
 }
