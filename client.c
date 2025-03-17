@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   client.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sakdil <sakdil@student.42istanbul.com.t    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/17 20:25:46 by sakdil            #+#    #+#             */
+/*   Updated: 2025/03/17 21:18:10 by sakdil           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minitalk.h"
 
 static int	ft_atoi(const char *str)
@@ -25,34 +37,41 @@ static int	ft_atoi(const char *str)
 	return (res * sign);
 }
 
-void send_bits(int pid, char *str)
+void	send_bits(int pid, char *str)
 {
 	int		i;
 	int		count;
 	char	c;
 
 	i = 0;
-	while(str[i] != '\0')
+	while (str[i] != '\0')
 	{
 		count = 7;
 		c = str[i];
-		while(count--)
+		while (count--)
 		{
 			if (c >> count & 1)
 				kill(pid, SIGUSR1);
 			else
 				kill(pid, SIGUSR2);
-			usleep(111);
+			pause ();
 		}
 		i++;
 	}
 }
-int main(int count, char **str)
+
+void	handle_ack(int signum)
+{
+	(void)signum;
+}
+
+int	main(int count, char **str)
 {
 	if (count < 3)
 	{
-    	write(1, "Something wrong!", 16);
-    	return (1);
+		write(1, "Something wrong!", 16);
+		return (1);
 	}
+	signal(SIGUSR2, handle_ack);
 	send_bits(ft_atoi(str[1]), str[2]);
 }
