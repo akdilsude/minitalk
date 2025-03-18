@@ -1,0 +1,73 @@
+İlk önce server.c çalıştırılır. (içindekiler ayarlanır ve bekler)
+
+signal(SIGUSR2, handle_ack); ile SIGUSR2 sinyali geldiğinde 
+handle_ack fonk. çağrılacağını bildirir.
+
+Henüz handle_ack çalışmaz, eğer SIGUSR2 gelirse handle_ack'i
+çalıştır sinyali verilir.
+
+send_bits ile agüman gönderilir.
+
+kill(pid, SIGUSR1); veya kill(pid, SIGUSR2); ile sinyaller server'a
+yollanır.
+
+server'daki kill(info->si_pid, SIGUSR2); ile SIGUSR2 sinyali client'a
+gider.
+
+Daha önce signal(SIGUSR2, handle_ack); tanımlandığı için, bu sinyal
+geldiğinde handle_ack fonksiyonu çalışır.
+
+handle_ack SIGUSR2 sinyalini yakalayarak server'ın client'ın pause()
+den uyanmasını sağlar.
+
+pause () uyandıktan sonra send_bits devam eder. 
+
+------------------------------------------------------------------------
+info->si_pid signal ile gönderilen PID bilgisini içerir.
+
+si_pid (signal process ID), siginfo_t yapısının bir üyesi.
+
+siginfo_t yapısı : si_signo (sinyal numarası), si_errno (hata kodu), 
+si_code (sinyalin nedeni), si_pid , ... alanları içerir.
+
+
+------------------------------------------------------------------------
+int	main(void)
+{
+	struct sigaction	sig_settings;
+
+	ft_putnbr(getpid());
+	write(1, "\n", 1);
+	sig_settings.sa_sigaction = handle_signal;
+	sig_settings.sa_flags = SA_SIGINFO;
+	sigaction(SIGUSR1, &sig_settings, NULL);
+	sigaction(SIGUSR2, &sig_settings, NULL);
+	while (1)
+	{
+		pause();
+	}
+} Ne anlama geliyor?
+
+struct sigaction yapısı signal.h kütüphanesinde olan bir yapıdır.
+
+sa sinyal işleme ayarlarını tutan bir yapı.
+
+sigaction sinyal işleme mekanizmasını özelleştirmek için kullanılır.
+
+sa yapısının sa_sigaction alanına handle_signal atanır.
+
+sa yapısının sa_flags alanına SA_SIGINFO bayrağı eklenir. Bu bayrak
+handle_signal'in sadece sinyal türünü değil, ek bilgiler almasını sağlar. (pid)
+
+sigaction(SIGUSR1, &sig_settings, NULL); &sa : Yukarıda tanımlanan sigaction yapısı 
+(içinde handle_signal ve SA_SIGINFO var).
+
+NULL : eski sinyal işleyicisini saklamak için bir işaretçi.
+
+while (1) { pause(); } : pause() süreci askıya alır ve bir sinyal gelene kadar bekler.
+Sinyal geldiğinde handle_signal çalışır ve süreç uyanır.
+
+Server sürekli çalışır halde kalır ve clienttan gelen sinyalleri bekler.
+
+---------------------------------------------------------------------------------------
+
