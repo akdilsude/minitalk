@@ -56,7 +56,6 @@ void	handle_signal(int signal_type, siginfo_t *info, void *context)
 	}
 	else
 		str = str << 1;
-	usleep(200);
 	kill(info->si_pid, SIGUSR2);
 }
 
